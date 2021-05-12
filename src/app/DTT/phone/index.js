@@ -15,6 +15,7 @@ import HeroIconButton from 'app/layouts/components/hero_icon_button'
 import countryCodeJSON from 'utils/helpers/country-code.json'
 import debounce from 'lodash.debounce'
 import { useMobileValue } from 'utils/hooks'
+import { useState, useEffect } from 'react'
 
 const Read = ({ data, size }) => {
   const { onCopy } = useClipboard(data.value)
@@ -42,20 +43,19 @@ const Read = ({ data, size }) => {
 
 export const Write = ({ questionCode, data, onSendAnswer }) => {
   const countryCode = countryCodeJSON[`${data?.value}`]
-
-  console.warn('countrycodeJSON', countryCode)
-
   const debouncedSendAnswer = debounce(onSendAnswer, 500)
 
   return (
     <HStack w={useMobileValue(['100%', '25vw'])}>
-      <Image src={`https://www.countryflags.io/${countryCode}/flat/64.png`} alt="..." />
+      <Image src={`https://www.countryflags.io/${countryCode}/flat/64.png`} alt="..." h="inherit" />
       <InputGroup>
         <InputLeftElement pointerEvents="none" children={<Text>{data?.value}</Text>} />
         <Input
           type="tel"
           test-id={questionCode}
-          onChange={e => debouncedSendAnswer(e.target.value)}
+          onChange={e => {
+            debouncedSendAnswer(e.target.value)
+          }}
         />
       </InputGroup>
     </HStack>
