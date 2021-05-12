@@ -1,9 +1,20 @@
-import { Text, useClipboard, useToast, HStack } from '@chakra-ui/react'
+import {
+  Text,
+  useClipboard,
+  useToast,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Image,
+} from '@chakra-ui/react'
 import phoneNumberFormatter from 'utils/formatters/phone-number'
 import { faPhoneAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Write } from 'app/DTT/text'
 import HeroIconButton from 'app/layouts/components/hero_icon_button'
+import countryCodeJSON from 'utils/helpers/country-code.json'
+import debounce from 'lodash.debounce'
+import { useMobileValue } from 'utils/hooks'
 
 const Read = ({ data, size }) => {
   const { onCopy } = useClipboard(data.value)
@@ -25,6 +36,28 @@ const Read = ({ data, size }) => {
       <Text w="10rem" fontSize={size}>
         {phoneNumberFormatter(data.value)}
       </Text>
+    </HStack>
+  )
+}
+
+export const Write = ({ questionCode, data, onSendAnswer }) => {
+  const countryCode = countryCodeJSON[`${data?.value}`]
+
+  console.warn('countrycodeJSON', countryCode)
+
+  const debouncedSendAnswer = debounce(onSendAnswer, 500)
+
+  return (
+    <HStack w={useMobileValue(['100%', '25vw'])}>
+      <Image src={`https://www.countryflags.io/${countryCode}/flat/64.png`} alt="..." />
+      <InputGroup>
+        <InputLeftElement pointerEvents="none" children={<Text>{data?.value}</Text>} />
+        <Input
+          type="tel"
+          test-id={questionCode}
+          onChange={e => debouncedSendAnswer(e.target.value)}
+        />
+      </InputGroup>
     </HStack>
   )
 }
