@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faEdit, faHandshake, faUser } from '@fortawesome/free-solid-svg-icons'
 
 import DetailLayout from '../layout'
-import { replace } from 'ramda'
+import { isEmpty, replace } from 'ramda'
 import Lane from 'app/SBE/lane'
 import { useIsMobile } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -33,6 +33,8 @@ const about = {
 const Rep = ({ sbeCode, targetCode }) => {
   const tileWidth = useIsMobile() ? '90vw' : '33vw'
   const validation = useSelector(selectCode(targetCode, 'PRI_VALIDATION'))
+  const hcValidation = useSelector(selectCode(targetCode, 'PRI_HC_VALIDATION_DOC_URL'))
+  const hcValidationUrl = hcValidation?.value
   const internships = (
     <Lane
       width={tileWidth}
@@ -78,6 +80,18 @@ const Rep = ({ sbeCode, targetCode }) => {
       </Button>
     )
 
+  const hcValidationButton = (
+    <Button
+      colorScheme="green"
+      leftIcon={<FontAwesomeIcon icon={faDownload} />}
+      onClick={() => {
+        window.open(hcValidationUrl, '_blank')
+      }}
+    >
+      {`Host Company Validation`}
+    </Button>
+  )
+
   const documents = (
     <Card variant="card0" w={tileWidth}>
       <VStack align="start">
@@ -88,6 +102,7 @@ const Rep = ({ sbeCode, targetCode }) => {
         </Text>
         {ohs}
         {hcs}
+        {hcValidationUrl && !isEmpty(hcValidationUrl) && hcValidationButton}
       </VStack>
     </Card>
   )
