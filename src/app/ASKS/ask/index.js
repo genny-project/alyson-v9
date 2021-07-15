@@ -49,6 +49,7 @@ const Ask = ({
   passedAskData,
   passedTargetCode,
   config,
+  noLabel,
 }) => {
   const askData = useSelector(selectCode(parentCode, passedQuestionCode)) || passedAskData
 
@@ -106,7 +107,7 @@ const Ask = ({
   if (!!disabled && component !== 'button')
     return (
       <FormControl isDisabled isRequired={mandatory}>
-        <HStack w={labelWidth} justify="space-between">
+        <HStack display={noLabel ? 'none' : 'block'} w={labelWidth} justify="space-between">
           <FormLabel id={attributeCode} textStyle="body.1">
             {name}
           </FormLabel>
@@ -144,10 +145,8 @@ const Ask = ({
       p={highlightedQuestion === attributeCode ? '3' : ''}
       transition="all 0.5s"
     >
-      <HStack w={labelWidth} justify="space-between">
-        <FormLabel id={attributeCode} textStyle="body.1">
-          {name}
-        </FormLabel>
+      <HStack justify="space-between" display={noLabel ? 'none' : 'flex'} w={labelWidth}>
+        <FormLabel id={attributeCode}>{name}</FormLabel>
         {saving ? (
           <FontAwesomeIcon icon={faCircle} color="gold" />
         ) : data?.value ? (

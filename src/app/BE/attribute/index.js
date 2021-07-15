@@ -34,8 +34,8 @@ const Attribute = ({
   fallback = null,
   styles,
 }) => {
-  const data = useSelector(selectCode(code, fixLnk(attribute)))
-  const dtt = useSelector(selectCode(data?.attributeCode))
+  const data = useSelector(selectCode(code, attribute))
+  const dtt = useSelector(selectCode(fixLnk(data?.attributeCode)))
   const dttData = useSelector(selectCode(dtt))
   const component = dttData?.component
 

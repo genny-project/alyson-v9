@@ -14,9 +14,8 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { onSendSearch } from 'vertx'
 import { useSelector } from 'react-redux'
 import { selectCode } from 'redux/db/selectors'
-import { useIsMobile } from 'utils/hooks'
 
-const ProcessSearch = ({ sbeCode, process }) => {
+const ProcessSearch = ({ sbeCode, process, placeholder }) => {
   const [searchValue, setSearchValue] = useState('')
   const inputRef = useRef(null)
   const clearRef = useRef(null)
@@ -40,14 +39,15 @@ const ProcessSearch = ({ sbeCode, process }) => {
   })
 
   return (
-    <Stack direction={useIsMobile() ? 'column' : 'row'}>
+    <Stack direction="row">
       <form onSubmit={handleSubmit}>
         <InputGroup w="xs" maxW="50vw">
           <InputLeftElement>
             <FontAwesomeIcon color="lightgrey" icon={faSearch} />
           </InputLeftElement>
           <Input
-            test-id={`${sbeCode}-SCH_WILDCARD`}
+            placeholder={placeholder}
+            test-id={`SEARCH-ALL-ATTRIBUTES`}
             defaultValue={search?.value || ''}
             ref={inputRef}
             value={searchValue}
@@ -60,6 +60,7 @@ const ProcessSearch = ({ sbeCode, process }) => {
               ref={clearRef}
               icon={<FontAwesomeIcon color="lightgrey" icon={faTimes} />}
               onClick={handleClear}
+              test-id={`process-view-clear-search`}
             />
           </InputRightElement>
         </InputGroup>
@@ -69,6 +70,7 @@ const ProcessSearch = ({ sbeCode, process }) => {
         onClick={handleSubmit}
         leftIcon={<FontAwesomeIcon icon={faSearch} />}
         colorScheme="primary"
+        test-id={`process-view-search`}
       >
         Search
       </Button>
